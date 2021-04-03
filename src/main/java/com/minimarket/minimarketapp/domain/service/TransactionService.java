@@ -8,6 +8,7 @@ import com.minimarket.minimarketapp.persistence.dao.TransactionDAO;
 import com.minimarket.minimarketapp.persistence.model.Transaction;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -42,6 +43,10 @@ public class TransactionService {
 
     public void deleteTransaction(Transaction transaction) {
         transactionDAO.deleteTransaction(transaction);
+    }
+
+    public double totalByProductIdBetweenDates(Date fromDate, Date toDate, Integer productId){
+        return transactionDAO.totalByProductIdBetweenDates(fromDate,toDate,productId);
     }
 
 }
