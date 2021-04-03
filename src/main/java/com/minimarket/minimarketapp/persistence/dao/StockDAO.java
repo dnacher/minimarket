@@ -18,7 +18,7 @@ public class StockDAO {
     private StockRepository repository;
     private final String STOCK = "El stock";
 
-    public Stock geStockByProductId(Integer id){
+    public Stock getStockByProductId(Integer id){
         return this.repository.findStocksByProduct_Id(id);
     }
 
@@ -59,5 +59,11 @@ public class StockDAO {
         }else{
             throw new MiniMarketException(ErrorHandling.valueUpdateError(STOCK));
         }
+    }
+
+    public Stock addStock(Integer productId, Integer amount){
+        Stock stock = getStockByProductId(productId);
+        stock.setAmount(stock.getAmount()+amount);
+        return this.repository.save(stock);
     }
 }
