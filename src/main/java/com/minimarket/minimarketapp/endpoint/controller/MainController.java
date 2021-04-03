@@ -10,7 +10,7 @@ public class MainController {
 
     @GetMapping(value = "/version/")
     public String getProduct(){
-        return "Version 1.0.0";
+        return "Version 1.2.0";
     }
 
 }
