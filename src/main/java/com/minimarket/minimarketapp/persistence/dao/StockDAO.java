@@ -1,7 +1,9 @@
 package com.minimarket.minimarketapp.persistence.dao;
 
+import com.minimarket.minimarketapp.error.ErrorHandling;
 import com.minimarket.minimarketapp.exceptions.MiniMarketException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import com.minimarket.minimarketapp.persistence.model.Stock;
 import com.minimarket.minimarketapp.persistence.repository.StockRepository;
@@ -14,6 +16,7 @@ public class StockDAO {
 
     @Autowired
     private StockRepository repository;
+    private final String STOCK = "El stock";
 
     public Stock geStockByProductId(Integer id){
         return this.repository.findStocksByProduct_Id(id);
@@ -27,19 +30,20 @@ public class StockDAO {
 
     public Stock getStockById(Integer id) throws MiniMarketException {
         return this.repository.findById(id).orElseThrow(() ->
-        {
-            String msg = String.format("The stock id %s does not exist", id.toString());
-            return new MiniMarketException(msg);
-        });
+                new MiniMarketException(ErrorHandling.valueNotFound(STOCK, id)));
     }
 
     public Stock saveStock(Stock stock) throws MiniMarketException {
-        return this.repository.save(stock);
+        if(repository.findStocksByProduct_Id(stock.getProduct().getId())!=null){
+            return this.repository.save(stock);
+        }else{
+            throw new MiniMarketException(ErrorHandling.ALREADY_EXIST_PRODUCT_STOCK, HttpStatus.BAD_REQUEST);
+        }
     }
 
-    public List<Stock> saveStocks(List<Stock> stockes) throws MiniMarketException {
+    public List<Stock> saveStocks(List<Stock> stocks) throws MiniMarketException {
         List<Stock> finalList= new ArrayList<>();
-        this.repository.saveAll(stockes).forEach(stock -> {
+        this.repository.saveAll(stocks).forEach(stock -> {
             finalList.add(stock);
         });
         return finalList;
@@ -53,8 +57,7 @@ public class StockDAO {
         if(stock.getId()!=null){
             return this.repository.save(stock);
         }else{
-            String msg = String.format("Cannot update a stock without an Id");
-            throw new MiniMarketException(msg);
+            throw new MiniMarketException(ErrorHandling.valueUpdateError(STOCK));
         }
     }
 }

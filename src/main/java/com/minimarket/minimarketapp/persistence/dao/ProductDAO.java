@@ -1,5 +1,6 @@
 package com.minimarket.minimarketapp.persistence.dao;
 
+import com.minimarket.minimarketapp.error.ErrorHandling;
 import com.minimarket.minimarketapp.exceptions.MiniMarketException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ public class ProductDAO {
 
     @Autowired
     private ProductRepository repository;
+    private final String PRODUCT = "El producto";
 
     public List<Product> getProduct(){
         List<Product> products = new ArrayList<>();
@@ -23,19 +25,16 @@ public class ProductDAO {
 
     public Product getProductById(Integer id) throws MiniMarketException {
         return this.repository.findById(id).orElseThrow(() ->
-        {
-            String msg = String.format("The product id %s does not exist", id.toString());
-            return new MiniMarketException(msg);
-        });
+                new MiniMarketException(ErrorHandling.valueNotFound(PRODUCT,id)));
     }
 
     public Product saveProduct(Product product) throws MiniMarketException {
         return this.repository.save(product);
     }
 
-    public List<Product> saveProductes(List<Product> productes) throws MiniMarketException {
+    public List<Product> saveProducts(List<Product> products) throws MiniMarketException {
         List<Product> finalList= new ArrayList<>();
-        this.repository.saveAll(productes).forEach(product -> {
+        this.repository.saveAll(products).forEach(product -> {
             finalList.add(product);
         });
         return finalList;
@@ -49,8 +48,7 @@ public class ProductDAO {
         if(product.getId()!=null){
             return this.repository.save(product);
         }else{
-            String msg = String.format("Cannot update a product without an Id");
-            throw new MiniMarketException(msg);
+            throw new MiniMarketException(ErrorHandling.valueUpdateError(PRODUCT));
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.minimarket.minimarketapp.persistence.dao;
 
+import com.minimarket.minimarketapp.error.ErrorHandling;
 import com.minimarket.minimarketapp.exceptions.MiniMarketException;
 import com.minimarket.minimarketapp.persistence.model.Status;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ public class AuditDAO {
 
     @Autowired
     private AuditRepository repository;
+    private final String AUDIT = "La audit";
 
     public List<Audit> getAudit(){
         List<Audit> audits = new ArrayList<>();
@@ -25,10 +27,8 @@ public class AuditDAO {
 
     public Audit getAuditById(Integer id) throws MiniMarketException {
         return this.repository.findById(id).orElseThrow(() ->
-        {
-            String msg =
-            return new MiniMarketException(msg);
-        });
+             new MiniMarketException(ErrorHandling.valueNotFound(AUDIT,id)
+        ));
     }
 
     public Audit saveAudit(Audit audit) throws MiniMarketException {

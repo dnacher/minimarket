@@ -15,6 +15,7 @@ import java.util.List;
 @Component
 public class TransactionDAO {
 
+    private final String TRANSACTION = "La transaccion";
     private final TransactionRepository repository;
     private final StockDAO stockDAO;
     private final AuditService auditService;
@@ -36,7 +37,7 @@ public class TransactionDAO {
 
     public Transaction getTransactionById(Integer id) throws MiniMarketException {
         return this.repository.findById(id).orElseThrow(() ->
-                new MiniMarketException(ErrorHandling.TransactionNotFound(id.toString()),HttpStatus.NOT_FOUND));
+                new MiniMarketException(ErrorHandling.valueNotFound(TRANSACTION,id),HttpStatus.NOT_FOUND));
     }
 
     public Transaction saveTransaction(Transaction transaction) throws MiniMarketException {
@@ -47,7 +48,7 @@ public class TransactionDAO {
             if(stock.getAmount()>=0){
                 stocks.add(stock);
             }else{
-                Audit audit = auditService.saveErrorAudit();
+                auditService.saveErrorAudit();
                 throw new MiniMarketException(ErrorHandling.noStockMessage(stock.getProduct()),HttpStatus.BAD_REQUEST);
             }
             transactionLine.setTransaction(transaction);
@@ -82,7 +83,7 @@ public class TransactionDAO {
             auditService.saveAudit(transaction.getId(),Status.UPDATED);
             return transaction;
         }else{
-            String msg = String.format(ErrorHandling.TransactionUpdateError());
+            String msg = String.format(ErrorHandling.valueUpdateError(TRANSACTION));
             auditService.saveErrorAudit();
             throw new MiniMarketException(msg,HttpStatus.BAD_REQUEST);
         }
