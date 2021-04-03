@@ -40,6 +40,11 @@ public class StockController {
         return this.stockService.updateStock(stock);
     }
 
+    @PutMapping(value = "")
+    public Stock updateStock(@RequestParam Integer productId, @RequestParam Integer amount){
+        return this.stockService.addStock(productId,amount);
+    }
+
     @PutMapping(value = "/mul")
     public List<Stock> updateStock(@RequestBody List<Stock> stocks){
         List<Stock> finalList = new ArrayList<>();
