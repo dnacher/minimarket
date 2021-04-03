@@ -3,11 +3,13 @@ package com.minimarket.minimarketapp.endpoint.controller;
 import com.minimarket.minimarketapp.domain.service.TransactionService;
 import com.minimarket.minimarketapp.domain.service.mappers.TransactionMapper;
 import com.minimarket.minimarketapp.dto.TransactionDTO;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import com.minimarket.minimarketapp.persistence.model.Transaction;
 import com.minimarket.minimarketapp.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -61,6 +63,11 @@ public class TransactionController {
     @GetMapping(value = "/{id}")
     public TransactionDTO getTransactionById(@PathVariable Integer id){
         return this.transactionService.getTransactionById(id);
+    }
+
+    @GetMapping(value = "/product/")
+    public double getTransaction(@RequestParam Integer id, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fromDate, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date toDate){
+        return this.transactionService.totalByProductIdBetweenDates(fromDate, toDate, id);
     }
 
     @DeleteMapping(value = "/{id}")
