@@ -15,24 +15,28 @@ public class StockService {
     @Autowired
     private StockDAO stockDAO;
 
-    public List<Stock> getStock(){
+    public List<Stock> getStock() {
         return stockDAO.getStock();
     }
 
-    public Stock getStockById(Integer id){
+    public Stock getStockById(Integer id) {
         return stockDAO.getStockById(id);
     }
 
-    public Stock saveStock(Stock stock){
+    public Stock saveStock(Stock stock) {
         return stockDAO.saveStock(stock);
     }
 
-    public Stock updateStock(Stock stock){
+    public Stock updateStock(Stock stock) {
         return stockDAO.updateStock(stock);
     }
 
-    public void deleteStock(Stock stock){
+    public Stock addStock(Integer productId, Integer amount) {
+        return stockDAO.addStock(productId, amount);
+    }
+
+    public void deleteStock(Stock stock) {
         stockDAO.deleteStock(stock);
     }
-    
+
 }
