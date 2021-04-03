@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.minimarket.minimarketapp.persistence.repository.TransactionRepository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -43,7 +44,7 @@ public class TransactionDAO {
     public Transaction saveTransaction(Transaction transaction) throws MiniMarketException {
         List<Stock> stocks = new ArrayList<>();
         for(TransactionLine transactionLine: transaction.getLines()){
-            Stock stock = stockDAO.geStockByProductId(transactionLine.getProduct().getId());
+            Stock stock = stockDAO.getStockByProductId(transactionLine.getProduct().getId());
             updateStock(stock, transactionLine.getAmount());
             if(stock.getAmount()>=0){
                 stocks.add(stock);
@@ -87,5 +88,9 @@ public class TransactionDAO {
             auditService.saveErrorAudit();
             throw new MiniMarketException(msg,HttpStatus.BAD_REQUEST);
         }
+    }
+
+    public double totalByProductIdBetweenDates(Date fromDate, Date toDate, Integer productId){
+        return repository.totalByProductIdBetweenDates(fromDate,toDate, productId);
     }
 }
