@@ -2,6 +2,7 @@ package com.minimarket.minimarketapp.domain.service;
 
 import com.minimarket.minimarketapp.domain.service.mappers.TransactionMapper;
 import com.minimarket.minimarketapp.dto.TransactionDTO;
+import com.minimarket.minimarketapp.persistence.wrappers.ProductWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.minimarket.minimarketapp.persistence.dao.TransactionDAO;
@@ -47,6 +48,10 @@ public class TransactionService {
 
     public double totalByProductIdBetweenDates(Date fromDate, Date toDate, Integer productId){
         return transactionDAO.totalByProductIdBetweenDates(fromDate,toDate,productId);
+    }
+
+    public List<ProductWrapper> totalBetweenDatesGroupByProducts(Date fromDate, Date toDate){
+        return transactionDAO.totalBetweenDatesGroupByProducts(fromDate, toDate);
     }
 
 }

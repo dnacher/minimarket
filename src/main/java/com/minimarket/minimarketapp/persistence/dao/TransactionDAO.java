@@ -4,6 +4,7 @@ import com.minimarket.minimarketapp.domain.service.AuditService;
 import com.minimarket.minimarketapp.error.ErrorHandling;
 import com.minimarket.minimarketapp.exceptions.MiniMarketException;
 import com.minimarket.minimarketapp.persistence.model.*;
+import com.minimarket.minimarketapp.persistence.wrappers.ProductWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -92,5 +93,9 @@ public class TransactionDAO {
 
     public double totalByProductIdBetweenDates(Date fromDate, Date toDate, Integer productId){
         return repository.totalByProductIdBetweenDates(fromDate,toDate, productId);
+    }
+
+    public List<ProductWrapper> totalBetweenDatesGroupByProducts(Date fromDate, Date toDate){
+        return repository.totalBetweenDatesGroupByProducts(fromDate, toDate);
     }
 }
