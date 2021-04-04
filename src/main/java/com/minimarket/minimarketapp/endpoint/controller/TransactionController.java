@@ -3,6 +3,7 @@ package com.minimarket.minimarketapp.endpoint.controller;
 import com.minimarket.minimarketapp.domain.service.TransactionService;
 import com.minimarket.minimarketapp.domain.service.mappers.TransactionMapper;
 import com.minimarket.minimarketapp.dto.TransactionDTO;
+import com.minimarket.minimarketapp.persistence.wrappers.ProductWrapper;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import com.minimarket.minimarketapp.persistence.model.Transaction;
@@ -66,8 +67,16 @@ public class TransactionController {
     }
 
     @GetMapping(value = "/product/")
-    public double getTransaction(@RequestParam Integer id, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fromDate, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date toDate){
+    public double getTransaction(@RequestParam Integer id,
+                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fromDate,
+                                 @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date toDate){
         return this.transactionService.totalByProductIdBetweenDates(fromDate, toDate, id);
+    }
+
+    @GetMapping(value = "/group")
+    public List<ProductWrapper> getTransaction(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fromDate,
+                                         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date toDate){
+        return this.transactionService.totalBetweenDatesGroupByProducts(fromDate, toDate);
     }
 
     @DeleteMapping(value = "/{id}")
