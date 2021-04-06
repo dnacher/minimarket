@@ -56,10 +56,19 @@ public class TransactionDAO {
             transactionLine.setTransaction(transaction);
             transactionLine.setSubtotal(transactionLine.getAmount() * transactionLine.getProduct().getUnitPrice());
         }
+        updateTotalTransaction(transaction);
         transaction = this.repository.save(transaction);
         stockDAO.saveStocks(stocks);
         auditService.saveAudit(transaction.getId(),Status.CREATED);
         return transaction;
+    }
+
+    private void updateTotalTransaction(Transaction transaction){
+        double total = 0.0;
+        for(TransactionLine tl: transaction.getLines()){
+            total+=tl.getSubtotal();
+        }
+        transaction.setTotal(total);
     }
 
     private void updateStock(Stock stock, Integer amount){
