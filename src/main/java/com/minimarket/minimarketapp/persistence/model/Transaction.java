@@ -24,6 +24,9 @@ public class Transaction {
     )
     private List<TransactionLine> lines = new ArrayList<>();
 
+    @Column(name = "total")
+    private Double total;
+
     public Transaction(){}
 
     public Integer getId() {
@@ -48,5 +51,13 @@ public class Transaction {
 
     public void setLines(List<TransactionLine> lines) {
         this.lines = lines;
+    }
+
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
     }
 }
